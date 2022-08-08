@@ -31,11 +31,11 @@
       
       <div class="form-field">
         <label>Загрузить аватар:</label>
-        <div v-if="imageUploaded" class="imageWrapper">
-          <div id="imageholder"></div>
+        <div v-show="imageUploaded" class="imageWrapper">
+          <div id="imageholder"><img ref="avImage" src="#" alt="аватар" /></div>
           <button class="button" @click="clearImage">❌ Очистить</button><br />
         </div>
-        <input ref="myfile" type="file" name="avatarfile" />
+        <input ref="myfile" type="file" name="avatarfile" @change="onFileChange" />
       </div>
 
       <div class="form-field">
@@ -112,10 +112,27 @@ export default {
       }
     },
 
+    // обработчик выбора кнопки "Обзор..." для загрузки файла
+    onFileChange() {
+      const inp = this.$refs.myfile;
+      const img = this.$refs.avImage;
+      const that = this;
+      if(inp.files && inp.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          img.src = e.target.result;
+          that.imageUploaded = true;
+        }
+        reader.readAsDataURL(inp.files[0]);
+      }
+    },
+
     clearImage(e) {
       e.preventDefault();
       this.imageUploaded = false;
-    }
+      this.$refs.avImage.src = null;
+      this.$refs.myfile.value = null;
+    },
     
   }
 }
@@ -184,5 +201,7 @@ input[type=text] {
   background-color: #eee;
   border: 2px dashed #ccc;
 }
+
+#imageholder img { width: 100%; }
 
 </style>
