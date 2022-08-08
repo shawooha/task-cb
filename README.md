@@ -1,5 +1,7 @@
 # task-cb
 
+Тестовое задание.
+
 ## Project setup
 ```
 npm install
